@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.e30.Cn_0cSjCw1QKtcYDx_mYN_q9jO2KkpcUoiVbILmKVB4LUCQvZ7YeuyQ51r9h3562KQoSas_ehbjpz2dw1Dk24hQEoN6ObGxfJDOlemF5flvLO_sqAHJDGGE24JRE4lIAXRK6aGyy4f4kmlICL6wG8sGSpSrkZlrFLOVRJckTptgaiOTIm5Udfmi45NljPBQKVpqXFSmmb3dRy_e8g3l5eBVFLgrBhKPQ1VbNfRK712KlQWs7jJ31fGpW2NxMloO1qcd6rux48quivzQBCvyK8PV5Sqrfw_OMOoNLcSvzePDcZXa2nPHSu3qQIikUdZIeCnkJX-w0t8uEFG3DfH1fVA"
 
         // Create a client with a PyGrid server URL
-        guard let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!, authToken: authToken) else {
+        guard let syftClient = SyftClient(url: URL(string: "http://3.7.248.14:5000")!, authToken: authToken) else {
 
             // Set background task failed if creating a client fails
             backgroundTask.setTaskCompleted(success: false)
@@ -103,12 +103,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         let labels = batchedTensors[1]
 
                         // Add batch_size, learning_rate and model_params as tensors
-                        let batchSize = [clientConfig.batchSize]
+                        let batchSize = [clientConfig.batchSize] as! [Int8]
                         let learningRate = [clientConfig.learningRate]
 
                         guard
                             let batchSizeTensor = TorchTensor.new(array: batchSize, size: [1]),
-                            let learningRateTensor = TorchTensor.new(array: learningRate, size: [1]) ,
+                            let learningRateTensor = TorchTensor.new(array: learningRate, size: [1]),
                             let modelParamTensors = modelParams.paramTensorsForTraining else
                         {
 

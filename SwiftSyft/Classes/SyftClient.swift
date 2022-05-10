@@ -214,7 +214,14 @@ public class SyftJob: SyftJobProtocol {
 
         let authPublisher = URLSession.shared.dataTaskPublisher(for: authRequest)
                                 .mapError { SwiftSyftError.networkError(underlyingError: $0, urlResponse: nil) }
-                                .map { $0.data }
+                                .map {
+                                    if let string = String(data: $0.data, encoding: .utf8) {
+                                        print(string)
+                                    } else {
+                                        print("not a valid UTF-8 sequence")
+                                    }
+                                    return $0.data
+                                }
                                 .decode(type: AuthResponse.self,
                                         decoder: decoder,
                                         errorTransform: { SwiftSyftError.networkError(underlyingError: $0, urlResponse: nil)})

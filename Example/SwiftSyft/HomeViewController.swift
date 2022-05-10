@@ -21,7 +21,7 @@ enum HomeScreenStrings {
     static let pygrid = "PyGrid"
     static let pygridKey = "@PyGrid@"
     static let pygridURL = "https://github.com/OpenMined/PyGrid/"
-    static let socketURL = "ws://127.0.0.1:5000" // "wss://localhost:5000/"
+    static let socketURL = "http://3.7.248.14:5000" // "wss://localhost:5000/"
     static let connectButtonText = "Connect to PyGrid server"
 }
 
@@ -79,7 +79,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
         let authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.e30.Cn_0cSjCw1QKtcYDx_mYN_q9jO2KkpcUoiVbILmKVB4LUCQvZ7YeuyQ51r9h3562KQoSas_ehbjpz2dw1Dk24hQEoN6ObGxfJDOlemF5flvLO_sqAHJDGGE24JRE4lIAXRK6aGyy4f4kmlICL6wG8sGSpSrkZlrFLOVRJckTptgaiOTIm5Udfmi45NljPBQKVpqXFSmmb3dRy_e8g3l5eBVFLgrBhKPQ1VbNfRK712KlQWs7jJ31fGpW2NxMloO1qcd6rux48quivzQBCvyK8PV5Sqrfw_OMOoNLcSvzePDcZXa2nPHSu3qQIikUdZIeCnkJX-w0t8uEFG3DfH1fVA"
 
         // Create a client with a PyGrid server URL
-        if let syftClient = SyftClient(url: URL(string: "ws://127.0.0.1:5000")!, authToken: authToken) {
+        if let syftClient = SyftClient(url: URL(string: "http://3.7.248.14:5000")!, authToken: authToken) {
 
             // Store the client as a property so it doesn't get deallocated during training.
             self.syftClient = syftClient
@@ -90,7 +90,7 @@ class HomeViewController: UIViewController, UITextViewDelegate {
             self.activityIndicator.startAnimating()
 
             // Create a new federated learning job with the model name and version
-            self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0")
+            self.syftJob = syftClient.newJob(modelName: "mnist", version: "1.0.0")
 
             // This function is called when SwiftSyft has downloaded the plans and model parameters from PyGrid
             // You are ready to train your model on your data
@@ -165,7 +165,8 @@ class HomeViewController: UIViewController, UITextViewDelegate {
 
                         // Example returns a list of tensors in the folowing order: loss, accuracy, model param 1,
                         // model param 2, model param 3, model param 4
-                        guard let tensorResults = result?.toTensorList() else {
+                        print(result?.isTuple(),result?.isTensorList())
+                        guard let tensorResults = result?.tupleToTensorList() else {
                             return
                         }
 
